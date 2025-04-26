@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 
 @Composable
-fun DescriptionPage() {
+fun DescriptionPage(category: String) {
     val textScrollState = rememberScrollState()
     Box(modifier = Modifier.fillMaxSize().background(color = Color.White)) {
         Column(modifier = Modifier.padding(32.dp)) {
@@ -44,7 +44,7 @@ fun DescriptionPage() {
                 contentAlignment = Alignment.Center
             ) {
                 Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("This is your category and a lot of text to enable scroll state", modifier = Modifier, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text("This is your category $category and a lot of text to enable scroll state", modifier = Modifier, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     // The ellipsize doesn't work as i have added a scroll state
                 }
             }
@@ -74,6 +74,6 @@ fun DescriptionPage() {
 @Composable
 fun DescriptionPagePreview() {
     ResumeAndroidAppTheme {
-        DescriptionPage()
+        DescriptionPage("")
     }
 }

@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 
 @Composable
-fun CategoryPage() {
+fun CategoryPage(onNavigate:(String) -> Unit) {
     // TODO: I have to implement a title with scaffold
     val CategoryList = arrayListOf<String>()
     CategoryList.add("Education")
@@ -47,6 +47,7 @@ fun CategoryPage() {
             CategoryList.forEach { category ->
                 showButton(category, selectedCategory, onClick = { temp, ->
                     selectedCategory = temp
+                    onNavigate(temp)
                 })
             }
             AddNewCategoryButton(onClick = {
@@ -112,6 +113,6 @@ fun AddNewCategoryButton(onClick: () -> Unit) {
 @Composable
 fun CategoryPagePreview() {
     ResumeAndroidAppTheme {
-        CategoryPage()
+        CategoryPage(onNavigate = {})
     }
 }
