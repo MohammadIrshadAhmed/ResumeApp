@@ -18,13 +18,14 @@ fun MyNavHost(navHostController: NavHostController) {
         }
         // Category Page
         composable("Category Page") {
-            CategoryPage(onNavigate =  { category ->
+            CategoryPage(onNavigate = { category ->
                 navHostController.navigate("Description Page/$category")
             })
         }
         // Description Page
         composable("Description Page/{category}",
-            arguments = listOf(navArgument("category"){ type = NavType.StringType})) { backStackEntry ->
+            arguments = listOf(navArgument("category") { type = NavType.StringType })
+        ) { backStackEntry ->
             val category = backStackEntry.arguments?.getString("category") ?: "Nope"
             DescriptionPage(category)
         }
