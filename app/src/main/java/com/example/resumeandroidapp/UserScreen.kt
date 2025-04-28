@@ -14,13 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 
 @Composable
@@ -45,7 +44,7 @@ fun UserScreen(viewModel: UserViewModel) {
                     Text(text = "User name = ${user.name} , User id = ${user.id}")
                 }
             }
-            Button(onClick = { viewModel.addUser(User(name = "new user"))}) {
+            Button(onClick = { viewModel.addUser(User(name = "new user", password = "ok"))}) {
                 Text(text = "Add User")
             }
             Button(onClick = { viewModel.deleteAllUsers()}) {
@@ -58,7 +57,8 @@ fun UserScreen(viewModel: UserViewModel) {
 @Preview
 @Composable
 fun UserScreenPreview() {
+    val userViewModel: UserViewModel = viewModel()
     ResumeAndroidAppTheme {
-        UserScreen(viewModel = UserViewModel(LocalContext.current))
+        UserScreen(viewModel = userViewModel)
     }
 }

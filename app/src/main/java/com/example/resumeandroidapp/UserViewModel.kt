@@ -1,7 +1,9 @@
 package com.example.resumeandroidapp
 
+import android.app.Application
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -17,8 +19,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class UserViewModel(context: Context): ViewModel() {
-    private val database = DataBaseBuilder.getInstance(context)
+class UserViewModel(application: Application): AndroidViewModel(application) {
+    private val database = DataBaseBuilder.getInstance(application.applicationContext)
     private val userDao = database.userDao()
     private val _isUserDataLoading = MutableStateFlow(true)
     val isUserDataLoading: StateFlow<Boolean> = _isUserDataLoading
@@ -45,9 +47,9 @@ class UserViewModel(context: Context): ViewModel() {
         }
     }
 
-    //    fun getAllUsers(): Flow<List<User>> = liveData {
-    //        emit(userDao.getAllUsers())
-    //    }
+//        fun getAllUsers(): Flow<List<User>> = liveData {
+//            emit(userDao.getAllUsers())
+//        }
 
     //
     //    init {
