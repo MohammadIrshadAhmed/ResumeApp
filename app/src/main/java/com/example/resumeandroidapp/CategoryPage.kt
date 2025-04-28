@@ -22,17 +22,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.R
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 
 @Composable
-fun CategoryPage(onNavigate:(String) -> Unit) {
+fun CategoryPage(userName: String, onNavigate: (String) -> Unit) {
     // TODO: I have to implement a title with scaffold
     val CategoryList = arrayListOf<String>()
     CategoryList.add("Education")
@@ -45,7 +43,7 @@ fun CategoryPage(onNavigate:(String) -> Unit) {
     ) {
         Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly) {
             CategoryList.forEach { category ->
-                showButton(category, selectedCategory, onClick = { temp, ->
+                showButton(category, selectedCategory, onClick = { temp ->
                     selectedCategory = temp
                     onNavigate(temp)
                 })
@@ -108,11 +106,10 @@ fun AddNewCategoryButton(onClick: () -> Unit) {
 }
 
 
-
 @Preview
 @Composable
 fun CategoryPagePreview() {
     ResumeAndroidAppTheme {
-        CategoryPage(onNavigate = {})
+        CategoryPage("", onNavigate = {})
     }
 }
