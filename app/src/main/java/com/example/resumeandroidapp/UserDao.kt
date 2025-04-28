@@ -17,6 +17,6 @@ interface UserDao {
     @Query("delete from user_table")
     suspend fun deleteAllUsers()
 
-    @Query("delete from sqlite_sequence where name='user_table'") // I added this to reset the counter
-    suspend fun resetTable()
+//    @Query("delete from sqlite_sequence where name='user_table'") // I added this to reset the counter
+//    suspend fun resetTable()
 }

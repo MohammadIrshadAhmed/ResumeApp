@@ -41,7 +41,7 @@ fun UserScreen(viewModel: UserViewModel) {
                 }
             } else {
                 users.forEach { user: User ->
-                    Text(text = "User name = ${user.name} , User id = ${user.id}")
+                    Text(text = "User name = ${user.name}")
                 }
             }
             Button(onClick = { viewModel.addUser(User(name = "new user", password = "ok"))}) {
