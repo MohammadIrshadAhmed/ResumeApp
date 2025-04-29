@@ -1,18 +1,11 @@
 package com.example.resumeandroidapp
 
 import android.app.Application
-import android.content.Context
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -25,7 +18,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     private val _isUserDataLoading = MutableStateFlow(true)
     val isUserDataLoading: StateFlow<Boolean> = _isUserDataLoading
 
-    val users: StateFlow<List<User>> = userDao.getAllUsers()
+    val usersData: StateFlow<List<User>> = userDao.getAllUsers()
         .onStart {
             _isUserDataLoading.value = true
         }
@@ -44,6 +37,12 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     fun addUser(user: User) {
         viewModelScope.launch {
             userDao.insertUser(user)
+        }
+    }
+
+    fun updateCategory(userName: String, updatedDetail: String) {
+        viewModelScope.launch {
+            userDao.updateDetail(userName, updatedDetail)
         }
     }
 

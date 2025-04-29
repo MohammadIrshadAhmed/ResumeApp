@@ -42,7 +42,7 @@ import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 @Composable
 fun LoginPage(onNavigate: (String) -> Unit) {
     val userViewModel: UserViewModel = viewModel()
-    val users by userViewModel.users.collectAsStateWithLifecycle()
+    val usersData by userViewModel.usersData.collectAsStateWithLifecycle()
     var userName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isNewUser by remember { mutableStateOf(false) }
@@ -50,9 +50,9 @@ fun LoginPage(onNavigate: (String) -> Unit) {
     val isCredentialValid by remember {
         derivedStateOf {
             if (isNewUser) {
-                users.none { it.name == userName } && password.isNotEmpty()
+                usersData.none { it.name == userName } && password.isNotEmpty()
             } else {
-                (userName == "admin" && password == "****") || users.any { it.name == userName && it.password == password }
+                (userName == "admin" && password == "****") || usersData.any { it.name == userName && it.password == password }
             }
         }
     }
@@ -129,7 +129,7 @@ fun LoginPage(onNavigate: (String) -> Unit) {
                 Button(
                     onClick = {
                         if (isNewUser) {
-                            userViewModel.addUser(user = User(name = userName, password = password))
+                            userViewModel.addUser(user = User(name = userName, password = password, detail = ""))
                             isNewUser = false
                         }
                         onNavigate(userName)
