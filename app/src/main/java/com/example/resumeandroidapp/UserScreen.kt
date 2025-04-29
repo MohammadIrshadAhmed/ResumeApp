@@ -24,7 +24,7 @@ import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 
 @Composable
 fun UserScreen(viewModel: UserViewModel) {
-    val users by viewModel.users.collectAsState()
+    val users by viewModel.usersData.collectAsState()
     val isUserDataLoading by viewModel.isUserDataLoading.collectAsState()
     Column(modifier = Modifier.fillMaxSize().background(color = Color.White), Arrangement.SpaceEvenly) {
         Spacer(modifier = Modifier.fillMaxWidth().height(48.dp))
@@ -44,7 +44,7 @@ fun UserScreen(viewModel: UserViewModel) {
                     Text(text = "User name = ${user.name}")
                 }
             }
-            Button(onClick = { viewModel.addUser(User(name = "new user", password = "ok"))}) {
+            Button(onClick = { viewModel.addUser(User(name = "new user", password = "ok", detail = ""))}) {
                 Text(text = "Add User")
             }
             Button(onClick = { viewModel.deleteAllUsers()}) {

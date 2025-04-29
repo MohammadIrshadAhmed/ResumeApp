@@ -9,5 +9,6 @@ data class User(
     @PrimaryKey
     @ColumnInfo(name = "username")
     val name: String,
-    val password: String
+    val password: String,
+    var detail: String
 )

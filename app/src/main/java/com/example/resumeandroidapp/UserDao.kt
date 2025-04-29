@@ -1,7 +1,6 @@
 package com.example.resumeandroidapp
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +15,9 @@ interface UserDao {
 
     @Query("delete from user_table")
     suspend fun deleteAllUsers()
+
+    @Query("update user_table set detail = :newDetail where username = :userName")
+    suspend fun updateDetail(userName: String, newDetail: String)
 
 //    @Query("delete from sqlite_sequence where name='user_table'") // I added this to reset the counter
 //    suspend fun resetTable()

@@ -14,8 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,42 +31,61 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.resumeandroidapp.Utils.getCategoryAndDescription
+import com.example.resumeandroidapp.Utils.makeDetailString
 import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 
 @Composable
 fun CategoryPage(userName: String, onNavigate: (String) -> Unit) {
-    // TODO: I have to implement a title with scaffold
-    val CategoryList = arrayListOf<String>()
-    CategoryList.add("Education")
-    CategoryList.add("Skills")
+
+    val userViewModel: UserViewModel = viewModel()
+    val usersData by userViewModel.usersData.collectAsState()
+    var userDetail by remember { mutableStateOf("") }
+    userDetail = usersData.firstOrNull { it.name == userName }?.detail ?: ""
+    val categoryList by remember(userDetail) {
+        mutableStateOf(getCategoryAndDescription(userDetail))
+    }
     var selectedCategory by remember { mutableStateOf("") }
+    var showInputDialog by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
     ) {
         Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly) {
-            CategoryList.forEach { category ->
-                showButton(category, selectedCategory, onClick = { temp ->
+            categoryList.forEach { category ->
+                ShowButton(category.first, selectedCategory, onClick = { temp ->
                     selectedCategory = temp
                     onNavigate(temp)
                 })
             }
             AddNewCategoryButton(onClick = {
+                showInputDialog = true
             })
         }
+    }
+    if (showInputDialog) {
+        EnterCategoryandDescription(categoryList, onClick = { category, description, showDialog ->
+            showInputDialog = showDialog
+            val detail = makeDetailString(userDetail, category, description)
+            userViewModel.updateCategory(userName, detail)
+        }, onDismiss = { showDialog ->
+            showInputDialog = showDialog
+        })
     }
 }
 
 @Composable
-fun showButton(category: String, selected_category: String, onClick: (String) -> Unit) {
+fun ShowButton(category: String, selectedCategory: String, onClick: (String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
             .height(48.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(color = if (selected_category != category) Color.Gray else Color.Blue)
+            .background(color = if (selectedCategory != category) Color.Gray else Color.Blue)
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(16.dp))
             .clickable {
                 onClick(category)
@@ -105,6 +128,56 @@ fun AddNewCategoryButton(onClick: () -> Unit) {
     }
 }
 
+@Composable
+fun EnterCategoryandDescription(
+    categoryList: ArrayList<Pair<String, String>>,
+    onClick: (category: String, description: String, showDialog: Boolean) -> Unit,
+    onDismiss: (showDialog: Boolean) -> Unit
+) {
+    var category by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var enableConfirmButton by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = { onDismiss(false) },
+        confirmButton = {
+            Button(
+                onClick = { onClick(category, description, false) },
+                enabled = enableConfirmButton
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            Button(onClick = { onDismiss(false) }) {
+                Text("Cancel")
+            }
+        },
+        title = { Text("Enter a new category and description") },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = category,
+                    onValueChange = {
+                        category = it.filter { it.isLetterOrDigit() }
+                        enableConfirmButton =
+                            (categoryList.none { it.first == category } && description.isNotEmpty())
+                    },
+                    label = { Text("Category") }
+                )
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = {
+                        description = it.filter { it.isLetterOrDigit() }
+                        enableConfirmButton =
+                            (categoryList.none { it.first == category } && description.isNotEmpty())
+                    },
+                    label = { Text("Description") }
+                )
+            }
+        }
+    )
+
+}
 
 @Preview
 @Composable
