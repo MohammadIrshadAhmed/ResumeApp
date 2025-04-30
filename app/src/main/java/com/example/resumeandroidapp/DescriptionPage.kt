@@ -15,6 +15,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,11 +24,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 
 @Composable
-fun DescriptionPage(category: String) {
+fun DescriptionPage(category: String, userViewModel: UserViewModel) {
     val textScrollState = rememberScrollState()
+    val categoryDescriptionList by userViewModel.categoryDescriptionList.collectAsState()
+    val description = categoryDescriptionList.first { it.first == category }.second
     Box(modifier = Modifier.fillMaxSize().background(color = Color.White)) {
         Column(modifier = Modifier.padding(32.dp)) {
             Box(
@@ -40,7 +45,7 @@ fun DescriptionPage(category: String) {
                 contentAlignment = Alignment.Center
             ) {
                 Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("This is your category $category and a lot of text to enable scroll state", modifier = Modifier, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(category, modifier = Modifier, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
             Spacer(modifier = Modifier.fillMaxWidth().height(24.dp))
@@ -52,13 +57,7 @@ fun DescriptionPage(category: String) {
                     .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(16.dp)),
             ) {
                 Row(modifier = Modifier.padding(16.dp)) {
-                    Text(text = "Developed and optimized the Bill Payment module of ICICI Bank's i-Mobile Pay App. \n" +
-                            "• Designed intuitive and responsive UIs using Kotlin and XML in Android Studio.  \n" +
-                            "• Integrated RESTful APIs (GET, POST, UPDATE) for seamless data transactions. \n" +
-                            "Jun 2023 – Present \n" +
-                            "• Collaborated with cross-functional teams using GitHub, Jira, and Figma for version control, project \n" +
-                            "tracking, and UI design. \n" +
-                            "• Followed Agile (Sprint) methodologies to develop and deploy high-quality mobile application. ")
+                    Text(text = description)
                 }
             }
         }
@@ -69,6 +68,6 @@ fun DescriptionPage(category: String) {
 @Composable
 fun DescriptionPagePreview() {
     ResumeAndroidAppTheme {
-        DescriptionPage("")
+        DescriptionPage("", viewModel())
     }
 }

@@ -17,6 +17,12 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     private val userDao = database.userDao()
     private val _isUserDataLoading = MutableStateFlow(true)
     val isUserDataLoading: StateFlow<Boolean> = _isUserDataLoading
+    var _categoryDescriptionList = MutableStateFlow<ArrayList<Pair<String, String>>>(arrayListOf())
+    var categoryDescriptionList: StateFlow<ArrayList<Pair<String, String>>> = _categoryDescriptionList
+
+    fun setCategoryDescriptionList(updatedList: ArrayList<Pair<String, String>>) {
+        _categoryDescriptionList.value = updatedList
+    }
 
     val usersData: StateFlow<List<User>> = userDao.getAllUsers()
         .onStart {
