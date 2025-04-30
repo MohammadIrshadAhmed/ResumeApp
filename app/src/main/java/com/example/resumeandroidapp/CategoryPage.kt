@@ -37,15 +37,15 @@ import com.example.resumeandroidapp.Utils.makeDetailString
 import com.example.resumeandroidapp.ui.theme.ResumeAndroidAppTheme
 
 @Composable
-fun CategoryPage(userName: String, onNavigate: (String) -> Unit) {
+fun CategoryPage(userName: String,userViewModel: UserViewModel, onNavigate: (String) -> Unit) {
 
-    val userViewModel: UserViewModel = viewModel()
     val usersData by userViewModel.usersData.collectAsState()
     var userDetail by remember { mutableStateOf("") }
     userDetail = usersData.firstOrNull { it.name == userName }?.detail ?: ""
     val categoryList by remember(userDetail) {
         mutableStateOf(getCategoryAndDescription(userDetail))
     }
+    userViewModel.setCategoryDescriptionList(categoryList)
     var selectedCategory by remember { mutableStateOf("") }
     var showInputDialog by remember { mutableStateOf(false) }
 
@@ -183,6 +183,6 @@ fun EnterCategoryandDescription(
 @Composable
 fun CategoryPagePreview() {
     ResumeAndroidAppTheme {
-        CategoryPage("", onNavigate = {})
+        CategoryPage("", viewModel(), onNavigate = {})
     }
 }
